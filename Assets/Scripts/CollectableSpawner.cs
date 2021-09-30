@@ -20,7 +20,6 @@ public class CollectableSpawner : MonoBehaviour
         NavMeshHit hit;
         var finalPosition = Vector3.zero;
         if (NavMesh.SamplePosition(randomDirection, out hit, radius, 1)) finalPosition = hit.position;
-        print(finalPosition);
         return finalPosition;
     }
 

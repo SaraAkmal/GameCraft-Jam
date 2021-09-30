@@ -21,6 +21,9 @@ public class PlayerMovement : MonoBehaviour
 
     //Jumping
     public float jumpForce = 550f;
+
+    [SerializeField] private Animator animator;
+    private readonly float jumpCooldown = 0.25f;
     private readonly float sensitivity = 50f;
     private readonly float sensMultiplier = 1f;
     private readonly float threshold = 0.01f;
@@ -29,7 +32,6 @@ public class PlayerMovement : MonoBehaviour
 
 
     private float desiredX;
-    private readonly float jumpCooldown = 0.25f;
     private bool jumping, sprinting, crouching;
 
     //Sliding
@@ -161,11 +163,18 @@ public class PlayerMovement : MonoBehaviour
         //Apply forces to move player
         rb.AddForce(orientation.transform.forward * y * moveSpeed * Time.deltaTime * multiplier * multiplierV);
         rb.AddForce(orientation.transform.right * x * moveSpeed * Time.deltaTime * multiplier);
+
+        print(x + " " + y);
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.W))
+            animator.SetBool("isRunning", true);
+        else
+            animator.SetBool("isRunning", false);
     }
 
     private void ResetJump()
     {
         readyToJump = true;
+        animator.SetBool("isJumping", false);
     }
 
     private void Jump()
@@ -184,7 +193,7 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector3(vel.x, 0, vel.z);
             else if (rb.velocity.y > 0)
                 rb.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
-
+            animator.SetBool("isJumping", true);
             Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
@@ -192,14 +201,14 @@ public class PlayerMovement : MonoBehaviour
     private void Look()
     {
         var mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
-        var mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
+        // var mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
 
         //Find current look rotation
         var rot = playerCam.transform.localRotation.eulerAngles;
         desiredX = rot.y + mouseX;
 
         //Rotate, and also make sure we dont over- or under-rotate.
-        xRotation -= mouseY;
+        //xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         //Perform the rotations
