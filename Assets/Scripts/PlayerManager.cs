@@ -25,7 +25,17 @@ public class PlayerManager : MonoBehaviour
             {
                 Debug.Log("Got enemy reference");
                 enemy.GetComponentInChildren<VFX>().size = 1;
+                Invoke("KillEnemy", 3);
             }
+        }
+    }
+    private void KillEnemy()
+    {
+        if (enemy)
+        {
+            Destroy(enemy.gameObject);
+            scoreText.text = "Congrats you won or sum shit.";
+            Debug.Log("You won and stuff");
         }
     }
 }
