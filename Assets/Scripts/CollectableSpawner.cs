@@ -6,7 +6,8 @@ using Random = UnityEngine.Random;
 public class CollectableSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject collectable;
-
+    public int collectablesCount=10;
+    public int spawnRadius = 50;
     private void Start()
     {
         SpawCollectables();
@@ -25,9 +26,9 @@ public class CollectableSpawner : MonoBehaviour
 
     private void SpawCollectables()
     {
-        for (var i = 0; i < 10; i++)
+        for (var i = 0; i < collectablesCount; i++)
         {
-            var randomPos = RandomNavmeshLocation(30);
+            var randomPos = RandomNavmeshLocation(spawnRadius);
             Instantiate(collectable, new Vector3(randomPos.x, 2.06f, randomPos.z), quaternion.identity);
         }
     }
