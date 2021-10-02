@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour
             {
                 Debug.Log("Got enemy reference");
                 enemy.GetComponentInChildren<VFX>().size = 1;
-                Invoke("KillEnemy", 3);
+                Invoke("KillEnemy", 9);
             }
         }
     }
